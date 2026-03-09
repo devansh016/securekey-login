@@ -35,10 +35,11 @@ class Passkey_Login_Challenge {
 				return '';
 			}
 		}
-		$ttl       = self::CHALLENGE_TTL;
+		$ttl = self::CHALLENGE_TTL;
 
 		$user_value = null === $user_id ? null : $user_id;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Writing challenge records to the plugin-owned table.
 		$inserted = $wpdb->insert(
 			$table,
 			array(
@@ -55,7 +56,12 @@ class Passkey_Login_Challenge {
 		if ( false === $inserted ) {
 			Passkey_Login_Installer::create_site_tables();
 			$table = $this->get_table_name();
-			if ( '' === $table || false === $wpdb->insert(
+			if ( '' === $table ) {
+				return '';
+			}
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Retrying insert after ensuring table creation.
+			$retry_inserted = $wpdb->insert(
 				$table,
 				array(
 					'user_id'        => $user_value,
@@ -66,7 +72,8 @@ class Passkey_Login_Challenge {
 					'ip_address'     => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
 				),
 				array( '%d', '%s', '%s', '%s', '%s', '%s' )
-			) ) {
+			);
+			if ( false === $retry_inserted ) {
 				return '';
 			}
 		}
@@ -97,6 +104,7 @@ class Passkey_Login_Challenge {
 		}
 
 		if ( null !== $user_id ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Reading the latest challenge from the plugin-owned table.
 			$row = $wpdb->get_row(
 				$wpdb->prepare(
 					'SELECT id, expires_at FROM %i WHERE challenge_hash = %s AND type = %s AND user_id = %d ORDER BY id DESC LIMIT 1',
@@ -107,6 +115,7 @@ class Passkey_Login_Challenge {
 				)
 			);
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Reading anonymous challenge from the plugin-owned table.
 			$row = $wpdb->get_row(
 				$wpdb->prepare(
 					'SELECT id, expires_at FROM %i WHERE challenge_hash = %s AND type = %s ORDER BY id DESC LIMIT 1',
@@ -121,10 +130,12 @@ class Passkey_Login_Challenge {
 		}
 
 		if ( strtotime( (string) $row->expires_at ) < time() ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Consuming expired challenge rows from plugin-owned table.
 			$wpdb->delete( $table, array( 'id' => (int) $row->id ), array( '%d' ) );
 			return false;
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time challenge consumption requires immediate row deletion.
 		$wpdb->delete( $table, array( 'id' => (int) $row->id ), array( '%d' ) );
 
 		return true;
@@ -142,6 +153,7 @@ class Passkey_Login_Challenge {
 			return;
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Purging expired rows from plugin-owned table.
 		$wpdb->query(
 			$wpdb->prepare(
 				'DELETE FROM %i WHERE expires_at < %s',
@@ -160,6 +172,7 @@ class Passkey_Login_Challenge {
 		global $wpdb;
 
 		$table = $wpdb->prefix . 'passkey_login_challenges';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Table existence check for plugin-owned table.
 		$found = $wpdb->get_var(
 			$wpdb->prepare( 'SHOW TABLES LIKE %s', $table )
 		);

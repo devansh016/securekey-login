@@ -37,6 +37,7 @@ class Passkey_Login_Credential {
 			return 0;
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Writing credential rows to plugin-owned table.
 		$inserted = $wpdb->insert(
 			$table,
 			array(
@@ -57,6 +58,7 @@ class Passkey_Login_Credential {
 			if ( '' === $table ) {
 				return 0;
 			}
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Retrying credential insert after ensuring table creation.
 			$inserted = $wpdb->insert(
 				$table,
 				array(
@@ -90,6 +92,7 @@ class Passkey_Login_Credential {
 		if ( '' === $table ) {
 			return array();
 		}
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Credential list is user-scoped and queried directly from plugin-owned table.
 		$rows  = $wpdb->get_results(
 			$wpdb->prepare(
 				'SELECT id, credential_id, sign_count, transports, name, created_at, last_used_at FROM %i WHERE user_id = %d ORDER BY id DESC',
@@ -122,6 +125,7 @@ class Passkey_Login_Credential {
 		if ( '' === $table ) {
 			return 0;
 		}
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Aggregate count read from plugin-owned table.
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
 				'SELECT COUNT(*) FROM %i WHERE user_id = %d',
@@ -146,6 +150,7 @@ class Passkey_Login_Credential {
 			return null;
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Credential lookup by credential ID from plugin-owned table.
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				'SELECT * FROM %i WHERE credential_id = %s LIMIT 1',
@@ -173,6 +178,7 @@ class Passkey_Login_Credential {
 			return;
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Updating sign count and usage timestamp for plugin-owned row.
 		$wpdb->update(
 			$table,
 			array(
@@ -220,6 +226,7 @@ class Passkey_Login_Credential {
 			return false;
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Deleting credential row from plugin-owned table.
 		$deleted = $wpdb->delete(
 			$table,
 			array(
@@ -241,6 +248,7 @@ class Passkey_Login_Credential {
 		global $wpdb;
 
 		$table = $wpdb->prefix . 'passkey_login_credentials';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Table existence check for plugin-owned table.
 		$found = $wpdb->get_var(
 			$wpdb->prepare( 'SHOW TABLES LIKE %s', $table )
 		);

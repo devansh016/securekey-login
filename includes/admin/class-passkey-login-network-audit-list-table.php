@@ -43,6 +43,7 @@ class Passkey_Login_Network_Audit_List_Table extends WP_List_Table {
 		$main_prefix  = $wpdb->get_blog_prefix( get_main_site_id() );
 		$table        = $main_prefix . 'passkey_login_network_audit_log';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Audit list is rendered from plugin-owned network audit table.
 		$this->items = $wpdb->get_results(
 			$wpdb->prepare(
 				'SELECT id, site_id, user_id, event, severity, message, created_at FROM %i ORDER BY id DESC LIMIT %d OFFSET %d',
@@ -53,6 +54,7 @@ class Passkey_Login_Network_Audit_List_Table extends WP_List_Table {
 			ARRAY_A
 		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Pagination total computed directly from plugin-owned audit table.
 		$total_items = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				'SELECT COUNT(*) FROM %i',

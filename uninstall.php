@@ -25,13 +25,14 @@ function passkey_login_drop_site_tables(): void {
 	);
 
 	foreach ( $passkey_login_tables as $passkey_login_table ) {
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- uninstall is expected to drop plugin tables.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange -- Uninstall must drop plugin-owned tables.
 		$wpdb->query(
 			$wpdb->prepare(
 				'DROP TABLE IF EXISTS %i',
 				$passkey_login_table
 			)
 		);
+		// phpcs:enable
 	}
 }
 
@@ -57,13 +58,14 @@ if ( is_multisite() ) {
 	);
 
 	foreach ( $passkey_login_audit_tables as $passkey_login_audit_table ) {
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- uninstall is expected to drop plugin tables.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange -- Uninstall must drop plugin-owned tables.
 		$wpdb->query(
 			$wpdb->prepare(
 				'DROP TABLE IF EXISTS %i',
 				$passkey_login_audit_table
 			)
 		);
+		// phpcs:enable
 	}
 } else {
 	delete_option( 'passkey_login_settings' );

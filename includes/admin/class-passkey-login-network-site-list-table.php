@@ -41,6 +41,7 @@ class Passkey_Login_Network_Site_List_Table extends WP_List_Table {
 			switch_to_blog( (int) $site->blog_id );
 			global $wpdb;
 			$table = $wpdb->prefix . 'passkey_login_credentials';
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Network overview reads counts from each site's plugin-owned table.
 			$count = (int) $wpdb->get_var(
 				$wpdb->prepare(
 					'SELECT COUNT(*) FROM %i',
