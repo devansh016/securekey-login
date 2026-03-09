@@ -40,7 +40,13 @@ class Passkey_Login_Network_Site_List_Table extends WP_List_Table {
 		foreach ( $sites as $site ) {
 			switch_to_blog( (int) $site->blog_id );
 			global $wpdb;
-			$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}passkey_login_credentials" );
+			$table = $wpdb->prefix . 'passkey_login_credentials';
+			$count = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(*) FROM %i',
+					$table
+				)
+			);
 			restore_current_blog();
 
 			$rows[] = array(

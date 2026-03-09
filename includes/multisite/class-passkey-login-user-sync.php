@@ -29,6 +29,7 @@ class Passkey_Login_User_Sync {
 		global $wpdb;
 		$table = $wpdb->prefix . 'passkey_login_credentials';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- plugin credentials must be cleaned up when users are deleted.
 		$wpdb->delete( $table, array( 'user_id' => $user_id ), array( '%d' ) );
 	}
 }

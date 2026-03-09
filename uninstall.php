@@ -19,26 +19,31 @@ global $wpdb;
 function passkey_login_drop_site_tables(): void {
 	global $wpdb;
 
-	$tables = array(
+	$passkey_login_tables = array(
 		$wpdb->prefix . 'passkey_login_credentials',
 		$wpdb->prefix . 'passkey_login_challenges',
 	);
 
-	foreach ( $tables as $table ) {
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table names are generated from trusted WordPress prefixes.
-		$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+	foreach ( $passkey_login_tables as $passkey_login_table ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- uninstall is expected to drop plugin tables.
+		$wpdb->query(
+			$wpdb->prepare(
+				'DROP TABLE IF EXISTS %i',
+				$passkey_login_table
+			)
+		);
 	}
 }
 
 if ( is_multisite() ) {
-	$site_ids = get_sites(
+	$passkey_login_site_ids = get_sites(
 		array(
 			'fields' => 'ids',
 		)
 	);
 
-	foreach ( $site_ids as $site_id ) {
-		switch_to_blog( (int) $site_id );
+	foreach ( $passkey_login_site_ids as $passkey_login_site_id ) {
+		switch_to_blog( (int) $passkey_login_site_id );
 		delete_option( 'passkey_login_settings' );
 		passkey_login_drop_site_tables();
 		restore_current_blog();
@@ -46,14 +51,19 @@ if ( is_multisite() ) {
 
 	delete_site_option( 'passkey_login_network_settings' );
 
-	$main_prefix = $wpdb->get_blog_prefix( get_main_site_id() );
-	$audit_tables = array(
-		$main_prefix . 'passkey_login_network_audit_log',
+	$passkey_login_main_prefix  = $wpdb->get_blog_prefix( get_main_site_id() );
+	$passkey_login_audit_tables = array(
+		$passkey_login_main_prefix . 'passkey_login_network_audit_log',
 	);
 
-	foreach ( $audit_tables as $audit_table ) {
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table names are generated from trusted WordPress prefixes.
-		$wpdb->query( "DROP TABLE IF EXISTS {$audit_table}" );
+	foreach ( $passkey_login_audit_tables as $passkey_login_audit_table ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- uninstall is expected to drop plugin tables.
+		$wpdb->query(
+			$wpdb->prepare(
+				'DROP TABLE IF EXISTS %i',
+				$passkey_login_audit_table
+			)
+		);
 	}
 } else {
 	delete_option( 'passkey_login_settings' );

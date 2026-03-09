@@ -92,7 +92,8 @@ class Passkey_Login_Credential {
 		}
 		$rows  = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id, credential_id, sign_count, transports, name, created_at, last_used_at FROM {$table} WHERE user_id = %d ORDER BY id DESC",
+				'SELECT id, credential_id, sign_count, transports, name, created_at, last_used_at FROM %i WHERE user_id = %d ORDER BY id DESC',
+				$table,
 				$user_id
 			),
 			ARRAY_A
@@ -123,7 +124,8 @@ class Passkey_Login_Credential {
 		}
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$table} WHERE user_id = %d",
+				'SELECT COUNT(*) FROM %i WHERE user_id = %d',
+				$table,
 				$user_id
 			)
 		);
@@ -146,7 +148,8 @@ class Passkey_Login_Credential {
 
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE credential_id = %s LIMIT 1",
+				'SELECT * FROM %i WHERE credential_id = %s LIMIT 1',
+				$table,
 				$credential_id
 			),
 			ARRAY_A

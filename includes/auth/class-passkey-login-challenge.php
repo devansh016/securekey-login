@@ -96,15 +96,26 @@ class Passkey_Login_Challenge {
 			return false;
 		}
 
-		$sql  = "SELECT id, expires_at FROM {$table} WHERE challenge_hash = %s AND type = %s";
-		$args = array( $hash, $type );
 		if ( null !== $user_id ) {
-			$sql   .= ' AND user_id = %d';
-			$args[] = $user_id;
+			$row = $wpdb->get_row(
+				$wpdb->prepare(
+					'SELECT id, expires_at FROM %i WHERE challenge_hash = %s AND type = %s AND user_id = %d ORDER BY id DESC LIMIT 1',
+					$table,
+					$hash,
+					$type,
+					$user_id
+				)
+			);
+		} else {
+			$row = $wpdb->get_row(
+				$wpdb->prepare(
+					'SELECT id, expires_at FROM %i WHERE challenge_hash = %s AND type = %s ORDER BY id DESC LIMIT 1',
+					$table,
+					$hash,
+					$type
+				)
+			);
 		}
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- placeholders are applied via $wpdb->prepare() after dynamic user_id clause assembly.
-		$row = $wpdb->get_row( $wpdb->prepare( $sql . ' ORDER BY id DESC LIMIT 1', $args ) );
 		if ( ! $row ) {
 			return false;
 		}
@@ -133,7 +144,8 @@ class Passkey_Login_Challenge {
 
 		$wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$table} WHERE expires_at < %s",
+				'DELETE FROM %i WHERE expires_at < %s',
+				$table,
 				gmdate( 'Y-m-d H:i:s' )
 			)
 		);

@@ -78,6 +78,7 @@ class Passkey_Login_Network_Admin {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only tab switch for admin screen rendering.
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'settings';
 		?>
 		<div class="wrap">

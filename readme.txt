@@ -2,7 +2,7 @@
 Contributors: passkey-login
 Tags: passkey, webauthn, security, login, multisite
 Requires at least: 6.3
-Tested up to: 6.6
+Tested up to: 6.9
 Requires PHP: 8.2
 Stable tag: 1.0.0
 License: GPLv2 or later

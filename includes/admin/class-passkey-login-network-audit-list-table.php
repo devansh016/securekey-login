@@ -45,14 +45,20 @@ class Passkey_Login_Network_Audit_List_Table extends WP_List_Table {
 
 		$this->items = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id, site_id, user_id, event, severity, message, created_at FROM {$table} ORDER BY id DESC LIMIT %d OFFSET %d",
+				'SELECT id, site_id, user_id, event, severity, message, created_at FROM %i ORDER BY id DESC LIMIT %d OFFSET %d',
+				$table,
 				$per_page,
 				$offset
 			),
 			ARRAY_A
 		);
 
-		$total_items = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" );
+		$total_items = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(*) FROM %i',
+				$table
+			)
+		);
 
 		$this->_column_headers = array( $this->get_columns(), array(), array() );
 		$this->set_pagination_args(

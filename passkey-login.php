@@ -52,8 +52,6 @@ register_deactivation_hook( __FILE__, array( 'Passkey_Login_Installer', 'deactiv
 add_action(
 	'plugins_loaded',
 	static function (): void {
-		load_plugin_textdomain( PASSKEY_LOGIN_TEXT_DOMAIN, false, dirname( plugin_basename( PASSKEY_LOGIN_PLUGIN_FILE ) ) . '/languages' );
-
 		$plugin = new Passkey_Login_Plugin();
 		$plugin->init();
 	}
