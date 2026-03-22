@@ -1,4 +1,4 @@
-.passkey-login-login-wrap {
+.securekey-login-login-wrap {
   margin: 10px 0 12px;
 }
 
@@ -25,17 +25,17 @@
   float: none;
 }
 
-#loginform .passkey-login-login-wrap {
+#loginform .securekey-login-login-wrap {
   order: 60;
   width: 100%;
 }
 
-#loginform #passkey-login-status {
+#loginform #securekey-login-status {
   order: 70;
   width: 100%;
 }
 
-.passkey-login-divider {
+.securekey-login-divider {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,8 +45,8 @@
   font-size: 16px;
 }
 
-.passkey-login-divider::before,
-.passkey-login-divider::after {
+.securekey-login-divider::before,
+.securekey-login-divider::after {
   content: "";
   flex: 1 1 auto;
   max-width: 130px;
@@ -54,11 +54,11 @@
   background: #d4d9de;
 }
 
-.passkey-login-button-wrap {
+.securekey-login-button-wrap {
   margin: 0;
 }
 
-#passkey-login-login {
+#securekey-login-login {
   width: 100%;
   min-height: 50px;
   display: inline-flex;
@@ -74,19 +74,19 @@
   line-height: 1.25;
 }
 
-#passkey-login-login:hover,
-#passkey-login-login:focus {
+#securekey-login-login:hover,
+#securekey-login-login:focus {
   border-color: #2c3338;
   background: #f6f7f7;
   color: #1d2327;
   box-shadow: none;
 }
 
-.passkey-login-label {
+.securekey-login-label {
   font-size: inherit;
   font-weight: inherit;
 }
 
-#passkey-login-status {
+#securekey-login-status {
   margin: 8px 0 0;
 }

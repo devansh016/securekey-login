@@ -2,7 +2,7 @@
 /**
  * Autoloader.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

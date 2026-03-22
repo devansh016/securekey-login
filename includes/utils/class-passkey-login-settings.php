@@ -2,7 +2,7 @@
 /**
  * Settings helper and defaults.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,12 +14,12 @@ class Passkey_Login_Settings {
 	/**
 	 * Site option key.
 	 */
-	private const SITE_OPTION = 'passkey_login_settings';
+	private const SITE_OPTION = 'securekey_login_settings';
 
 	/**
 	 * Network option key.
 	 */
-	private const NETWORK_OPTION = 'passkey_login_network_settings';
+	private const NETWORK_OPTION = 'securekey_login_network_settings';
 
 	/**
 	 * Get site defaults.

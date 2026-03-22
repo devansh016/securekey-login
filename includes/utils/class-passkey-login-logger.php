@@ -2,7 +2,7 @@
 /**
  * Logger.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,7 +30,7 @@ class Passkey_Login_Logger {
 		}
 
 		$main_prefix = is_multisite() ? $wpdb->get_blog_prefix( get_main_site_id() ) : $wpdb->prefix;
-		$table       = $main_prefix . 'passkey_login_network_audit_log';
+		$table       = $main_prefix . 'securekey_login_network_audit_log';
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- plugin audit events are persisted to a dedicated custom table.
 		$wpdb->insert(

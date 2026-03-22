@@ -8,6 +8,6 @@
 - WordPress Multisite support with network activation support.
 - Network settings, RP ID override, and audit log screens.
 - User profile passkey management (add/delete passkeys).
-- REST API endpoints under `/wp-json/passkey-login/v1`.
+- REST API endpoints under `/wp-json/securekey-login/v1`.
 - Secure challenge handling, origin validation, sign count checks, and rate limiting.
 - Uninstall cleanup for plugin options and custom database tables.

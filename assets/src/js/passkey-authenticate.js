@@ -64,7 +64,7 @@
   }
 
   function setStatus(message, isError) {
-    const statusNode = document.getElementById('passkey-login-status');
+    const statusNode = document.getElementById('securekey-login-status');
     if (!statusNode) {
       return;
     }
@@ -119,7 +119,7 @@
         },
       };
 
-      const input = document.getElementById('passkey-login-assertion');
+      const input = document.getElementById('securekey-login-assertion');
       if (input) {
         input.value = JSON.stringify(payload);
       }
@@ -137,7 +137,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    const button = document.getElementById('passkey-login-login');
+    const button = document.getElementById('securekey-login-login');
     if (!button) {
       return;
     }

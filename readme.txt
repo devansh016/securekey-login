@@ -1,5 +1,5 @@
-=== Passkey Login ===
-Contributors: passkey-login
+=== Securekey Login ===
+Contributors: devansh2002
 Tags: passkey, webauthn, security, login, multisite
 Requires at least: 6.3
 Tested up to: 6.9
@@ -12,7 +12,7 @@ Passwordless passkey authentication (WebAuthn/FIDO2) for WordPress and WordPress
 
 == Description ==
 
-Passkey Login provides secure passkey-based login while preserving existing WordPress password login.
+Securekey Login provides secure passkey-based login while preserving existing WordPress password login.
 
 Features include:
 
@@ -20,12 +20,12 @@ Features include:
 * WordPress Multisite network support
 * Network admin settings and audit log
 * User profile passkey management
-* Secure REST API endpoints under `/wp-json/passkey-login/v1`
+* Secure REST API endpoints under `/wp-json/securekey-login/v1`
 * Password login remains available
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/passkey-login/`.
+1. Upload the plugin to `/wp-content/plugins/securekey-login/`.
 2. Activate it from the Plugins screen (or network activate in multisite).
 3. Configure settings from the site admin and network admin screens.
 

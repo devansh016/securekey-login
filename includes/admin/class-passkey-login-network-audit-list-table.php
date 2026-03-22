@@ -2,7 +2,7 @@
 /**
  * Network audit list table.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,12 +21,12 @@ class Passkey_Login_Network_Audit_List_Table extends WP_List_Table {
 	 */
 	public function get_columns(): array {
 		return array(
-			'created_at' => __( 'Time', 'passkey-login' ),
-			'site_id'    => __( 'Site', 'passkey-login' ),
-			'user_id'    => __( 'User', 'passkey-login' ),
-			'event'      => __( 'Event', 'passkey-login' ),
-			'severity'   => __( 'Severity', 'passkey-login' ),
-			'message'    => __( 'Message', 'passkey-login' ),
+			'created_at' => __( 'Time', 'securekey-login' ),
+			'site_id'    => __( 'Site', 'securekey-login' ),
+			'user_id'    => __( 'User', 'securekey-login' ),
+			'event'      => __( 'Event', 'securekey-login' ),
+			'severity'   => __( 'Severity', 'securekey-login' ),
+			'message'    => __( 'Message', 'securekey-login' ),
 		);
 	}
 
@@ -41,7 +41,7 @@ class Passkey_Login_Network_Audit_List_Table extends WP_List_Table {
 		$current_page = $this->get_pagenum();
 		$offset       = ( $current_page - 1 ) * $per_page;
 		$main_prefix  = $wpdb->get_blog_prefix( get_main_site_id() );
-		$table        = $main_prefix . 'passkey_login_network_audit_log';
+		$table        = $main_prefix . 'securekey_login_network_audit_log';
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Audit list is rendered from plugin-owned network audit table.
 		$this->items = $wpdb->get_results(

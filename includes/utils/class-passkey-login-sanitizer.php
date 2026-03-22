@@ -2,7 +2,7 @@
 /**
  * Sanitizer helpers.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -53,19 +53,42 @@ class Passkey_Login_Sanitizer {
 	/**
 	 * Decode JSON object safely.
 	 *
-	 * @param mixed $value Raw JSON.
+	 * @param mixed             $value Raw JSON.
+	 * @param array<int,string> $required_keys Required top-level keys.
 	 * @return array<string,mixed>
 	 */
-	public static function json_object( $value ): array {
+	public static function json_object( $value, array $required_keys = array() ): array {
 		if ( is_array( $value ) ) {
-			return $value;
+			return self::validate_json_object( $value, $required_keys );
 		}
 
-		$decoded = json_decode( (string) $value, true );
+		try {
+			$decoded = json_decode( (string) $value, true, 512, JSON_THROW_ON_ERROR );
+		} catch ( JsonException $exception ) {
+			return array();
+		}
+
 		if ( ! is_array( $decoded ) ) {
 			return array();
 		}
 
-		return $decoded;
+		return self::validate_json_object( $decoded, $required_keys );
+	}
+
+	/**
+	 * Validate a decoded JSON object.
+	 *
+	 * @param array<string,mixed> $value Decoded object.
+	 * @param array<int,string>   $required_keys Required keys.
+	 * @return array<string,mixed>
+	 */
+	private static function validate_json_object( array $value, array $required_keys ): array {
+		foreach ( $required_keys as $required_key ) {
+			if ( ! is_string( $required_key ) || '' === $required_key || ! array_key_exists( $required_key, $value ) ) {
+				return array();
+			}
+		}
+
+		return $value;
 	}
 }

@@ -1,5 +1,5 @@
 {
-  "name": "passkey-login/passkey-login",
+  "name": "securekey-login/securekey-login",
   "description": "Passwordless WebAuthn/FIDO2 passkey authentication plugin for WordPress multisite",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",

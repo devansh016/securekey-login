@@ -2,7 +2,7 @@
 /**
  * Challenge store.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -171,7 +171,7 @@ class Passkey_Login_Challenge {
 	private function get_table_name(): string {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'passkey_login_challenges';
+		$table = $wpdb->prefix . 'securekey_login_challenges';
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Table existence check for plugin-owned table.
 		$found = $wpdb->get_var(
 			$wpdb->prepare( 'SHOW TABLES LIKE %s', $table )

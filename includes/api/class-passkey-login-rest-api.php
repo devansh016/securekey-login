@@ -2,7 +2,7 @@
 /**
  * REST API controller.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,7 @@ class Passkey_Login_REST_API {
 	/**
 	 * Namespace.
 	 */
-	private const NAMESPACE = 'passkey-login/v1';
+	private const NAMESPACE = 'securekey-login/v1';
 
 	/**
 	 * Rate-limit max attempts per window.
@@ -109,16 +109,16 @@ class Passkey_Login_REST_API {
 	 */
 	public function register_begin( WP_REST_Request $request ) {
 		if ( ! $this->verify_rest_nonce( $request ) ) {
-			return $this->error( 'passkey_login_invalid_nonce', __( 'REST nonce verification failed.', 'passkey-login' ), 403 );
+			return $this->error( 'securekey_login_invalid_nonce', __( 'REST nonce verification failed.', 'securekey-login' ), 403 );
 		}
 
 		$user_id = get_current_user_id();
 		if ( $user_id <= 0 ) {
-			return $this->error( 'passkey_login_not_authenticated', __( 'You must be logged in.', 'passkey-login' ), 401 );
+			return $this->error( 'securekey_login_not_authenticated', __( 'You must be logged in.', 'securekey-login' ), 401 );
 		}
 
 		if ( ! $this->check_rate_limit( 'register_begin', $request ) ) {
-			return $this->error( 'passkey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'passkey-login' ), 429 );
+			return $this->error( 'securekey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'securekey-login' ), 429 );
 		}
 
 		$webauthn = new Passkey_Login_WebAuthn();
@@ -143,16 +143,16 @@ class Passkey_Login_REST_API {
 	 */
 	public function register_complete( WP_REST_Request $request ) {
 		if ( ! $this->verify_rest_nonce( $request ) ) {
-			return $this->error( 'passkey_login_invalid_nonce', __( 'REST nonce verification failed.', 'passkey-login' ), 403 );
+			return $this->error( 'securekey_login_invalid_nonce', __( 'REST nonce verification failed.', 'securekey-login' ), 403 );
 		}
 
 		$user_id = get_current_user_id();
 		if ( $user_id <= 0 ) {
-			return $this->error( 'passkey_login_not_authenticated', __( 'You must be logged in.', 'passkey-login' ), 401 );
+			return $this->error( 'securekey_login_not_authenticated', __( 'You must be logged in.', 'securekey-login' ), 401 );
 		}
 
 		if ( ! $this->check_rate_limit( 'register_complete', $request ) ) {
-			return $this->error( 'passkey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'passkey-login' ), 429 );
+			return $this->error( 'securekey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'securekey-login' ), 429 );
 		}
 
 		$payload  = Passkey_Login_Sanitizer::json_object( $request->get_param( 'credential' ) );
@@ -179,11 +179,11 @@ class Passkey_Login_REST_API {
 	 */
 	public function authenticate_begin( WP_REST_Request $request ) {
 		if ( ! $this->verify_rest_nonce( $request ) ) {
-			return $this->error( 'passkey_login_invalid_nonce', __( 'REST nonce verification failed.', 'passkey-login' ), 403 );
+			return $this->error( 'securekey_login_invalid_nonce', __( 'REST nonce verification failed.', 'securekey-login' ), 403 );
 		}
 
 		if ( ! $this->check_rate_limit( 'authenticate_begin', $request ) ) {
-			return $this->error( 'passkey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'passkey-login' ), 429 );
+			return $this->error( 'securekey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'securekey-login' ), 429 );
 		}
 
 		$username = Passkey_Login_Sanitizer::text( $request->get_param( 'username' ) );
@@ -217,11 +217,11 @@ class Passkey_Login_REST_API {
 	 */
 	public function authenticate_complete( WP_REST_Request $request ) {
 		if ( ! $this->verify_rest_nonce( $request ) ) {
-			return $this->error( 'passkey_login_invalid_nonce', __( 'REST nonce verification failed.', 'passkey-login' ), 403 );
+			return $this->error( 'securekey_login_invalid_nonce', __( 'REST nonce verification failed.', 'securekey-login' ), 403 );
 		}
 
 		if ( ! $this->check_rate_limit( 'authenticate_complete', $request ) ) {
-			return $this->error( 'passkey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'passkey-login' ), 429 );
+			return $this->error( 'securekey_login_rate_limited', __( 'Too many attempts. Please wait and retry.', 'securekey-login' ), 429 );
 		}
 
 		$payload  = Passkey_Login_Sanitizer::json_object( $request->get_param( 'assertion' ) );
@@ -235,7 +235,7 @@ class Passkey_Login_REST_API {
 		$user_id = (int) $result['user_id'];
 		$user    = get_user_by( 'id', $user_id );
 		if ( ! $user instanceof WP_User ) {
-			return $this->error( 'passkey_login_user_not_found', __( 'Authenticated user was not found.', 'passkey-login' ), 404 );
+			return $this->error( 'securekey_login_user_not_found', __( 'Authenticated user was not found.', 'securekey-login' ), 404 );
 		}
 
 		wp_set_current_user( $user_id );
@@ -260,12 +260,12 @@ class Passkey_Login_REST_API {
 	 */
 	public function credentials( WP_REST_Request $request ) {
 		if ( ! $this->verify_rest_nonce( $request ) ) {
-			return $this->error( 'passkey_login_invalid_nonce', __( 'REST nonce verification failed.', 'passkey-login' ), 403 );
+			return $this->error( 'securekey_login_invalid_nonce', __( 'REST nonce verification failed.', 'securekey-login' ), 403 );
 		}
 
 		$user_id = get_current_user_id();
 		if ( $user_id <= 0 ) {
-			return $this->error( 'passkey_login_not_authenticated', __( 'You must be logged in.', 'passkey-login' ), 401 );
+			return $this->error( 'securekey_login_not_authenticated', __( 'You must be logged in.', 'securekey-login' ), 401 );
 		}
 
 		$store = new Passkey_Login_Credential();
@@ -286,23 +286,23 @@ class Passkey_Login_REST_API {
 	 */
 	public function delete_credential( WP_REST_Request $request ) {
 		if ( ! $this->verify_rest_nonce( $request ) ) {
-			return $this->error( 'passkey_login_invalid_nonce', __( 'REST nonce verification failed.', 'passkey-login' ), 403 );
+			return $this->error( 'securekey_login_invalid_nonce', __( 'REST nonce verification failed.', 'securekey-login' ), 403 );
 		}
 
 		$user_id = get_current_user_id();
 		if ( $user_id <= 0 ) {
-			return $this->error( 'passkey_login_not_authenticated', __( 'You must be logged in.', 'passkey-login' ), 401 );
+			return $this->error( 'securekey_login_not_authenticated', __( 'You must be logged in.', 'securekey-login' ), 401 );
 		}
 
 		$credential_id = Passkey_Login_Sanitizer::absint( $request->get_param( 'id' ) );
 		if ( $credential_id <= 0 ) {
-			return $this->error( 'passkey_login_invalid_id', __( 'Invalid credential ID.', 'passkey-login' ), 400 );
+			return $this->error( 'securekey_login_invalid_id', __( 'Invalid credential ID.', 'securekey-login' ), 400 );
 		}
 
 		$store   = new Passkey_Login_Credential();
 		$deleted = $store->delete( $credential_id, $user_id );
 		if ( ! $deleted ) {
-			return $this->error( 'passkey_login_delete_failed', __( 'Could not delete credential.', 'passkey-login' ), 404 );
+			return $this->error( 'securekey_login_delete_failed', __( 'Could not delete credential.', 'securekey-login' ), 404 );
 		}
 
 		Passkey_Login_Logger::audit( 'passkey_deleted', 'User deleted a passkey credential.', array( 'credential_pk' => $credential_id ) );
@@ -345,7 +345,7 @@ class Passkey_Login_REST_API {
 		$remote  = is_string( $remote ) && '' !== $remote ? $remote : 'unknown';
 		$ip      = is_string( $ip ) && '' !== $ip ? explode( ',', $ip )[0] : $remote;
 		$ip      = sanitize_text_field( trim( (string) $ip ) );
-		$key     = 'passkey_login_rl_' . md5( $action . '|' . $ip );
+		$key     = 'securekey_login_rl_' . md5( $action . '|' . $ip );
 		$attempt = (int) get_transient( $key );
 
 		if ( $attempt >= self::RATE_LIMIT_ATTEMPTS ) {

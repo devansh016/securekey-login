@@ -2,7 +2,7 @@
 /**
  * Installer.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -62,8 +62,8 @@ class Passkey_Login_Installer {
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$credentials     = $wpdb->prefix . 'passkey_login_credentials';
-		$challenges      = $wpdb->prefix . 'passkey_login_challenges';
+		$credentials     = $wpdb->prefix . 'securekey_login_credentials';
+		$challenges      = $wpdb->prefix . 'securekey_login_challenges';
 
 		$sql_credentials = "CREATE TABLE {$credentials} (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -110,7 +110,7 @@ class Passkey_Login_Installer {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$main_prefix = is_multisite() ? $wpdb->get_blog_prefix( get_main_site_id() ) : $wpdb->prefix;
-		$audit_table = $main_prefix . 'passkey_login_network_audit_log';
+		$audit_table = $main_prefix . 'securekey_login_network_audit_log';
 
 		$sql_audit = "CREATE TABLE {$audit_table} (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

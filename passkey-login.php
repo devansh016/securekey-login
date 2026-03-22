@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Passkey Login
- * Plugin URI:  https://wordpress.org/plugins/passkey-login/
+ * Plugin Name: Securekey Login
+ * Plugin URI:  https://wordpress.org/plugins/securekey-login/
  * Description: Passwordless WebAuthn/FIDO2 passkey authentication for WordPress single-site and multisite.
  * Version:     1.0.0
  * Requires at least: 6.3
@@ -10,10 +10,10 @@
  * Author URI:  https://profiles.wordpress.org/devansh2002/
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: passkey-login
+ * Text Domain: securekey-login
  * Network:     true
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ if ( version_compare( PHP_VERSION, '8.2', '<' ) ) {
 	add_action(
 		'admin_notices',
 		static function (): void {
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'Passkey Login requires PHP 8.2 or newer.', 'passkey-login' ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'Securekey Login requires PHP 8.2 or newer.', 'securekey-login' ) . '</p></div>';
 		}
 	);
 
@@ -35,7 +35,7 @@ define( 'PASSKEY_LOGIN_VERSION', '1.0.0' );
 define( 'PASSKEY_LOGIN_PLUGIN_FILE', __FILE__ );
 define( 'PASSKEY_LOGIN_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PASSKEY_LOGIN_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'PASSKEY_LOGIN_TEXT_DOMAIN', 'passkey-login' );
+define( 'PASSKEY_LOGIN_TEXT_DOMAIN', 'securekey-login' );
 
 require_once PASSKEY_LOGIN_PLUGIN_DIR . 'includes/class-passkey-login-autoloader.php';
 require_once PASSKEY_LOGIN_PLUGIN_DIR . 'includes/class-passkey-login-installer.php';

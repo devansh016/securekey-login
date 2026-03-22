@@ -2,7 +2,7 @@
 /**
  * User sync/cleanup across network.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,7 +27,7 @@ class Passkey_Login_User_Sync {
 	 */
 	public function delete_user_credentials( int $user_id ): void {
 		global $wpdb;
-		$table = $wpdb->prefix . 'passkey_login_credentials';
+		$table = $wpdb->prefix . 'securekey_login_credentials';
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Plugin credentials must be cleaned up immediately when users are deleted.
 		$wpdb->delete( $table, array( 'user_id' => $user_id ), array( '%d' ) );

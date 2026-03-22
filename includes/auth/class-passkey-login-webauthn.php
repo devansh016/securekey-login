@@ -2,7 +2,7 @@
 /**
  * WebAuthn service.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -55,18 +55,18 @@ class Passkey_Login_WebAuthn {
 	 */
 	public function begin_registration( int $user_id ) {
 		if ( $user_id <= 0 ) {
-			return new WP_Error( 'passkey_login_invalid_user', __( 'Invalid user.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_user', __( 'Invalid user.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		$rp        = $this->get_relying_party();
 		$user      = get_userdata( $user_id );
 		$challenge = $this->challenge_store->create( $user_id, 'register' );
 		if ( '' === $challenge ) {
-			return new WP_Error( 'passkey_login_challenge_unavailable', __( 'Could not initialize passkey registration.', 'passkey-login' ), array( 'status' => 500 ) );
+			return new WP_Error( 'securekey_login_challenge_unavailable', __( 'Could not initialize passkey registration.', 'securekey-login' ), array( 'status' => 500 ) );
 		}
 
 		if ( ! $user instanceof WP_User ) {
-			return new WP_Error( 'passkey_login_invalid_user', __( 'User not found.', 'passkey-login' ), array( 'status' => 404 ) );
+			return new WP_Error( 'securekey_login_invalid_user', __( 'User not found.', 'securekey-login' ), array( 'status' => 404 ) );
 		}
 
 		$exclude_credentials = array();
@@ -118,11 +118,11 @@ class Passkey_Login_WebAuthn {
 		$name      = Passkey_Login_Sanitizer::text( $response['name'] ?? '' );
 
 		if ( '' === $challenge || '' === $origin ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid registration payload.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid registration payload.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		if ( ! $this->validate_origin( $origin ) ) {
-			return new WP_Error( 'passkey_login_invalid_origin', __( 'Invalid origin.', 'passkey-login' ), array( 'status' => 403 ) );
+			return new WP_Error( 'securekey_login_invalid_origin', __( 'Invalid origin.', 'securekey-login' ), array( 'status' => 403 ) );
 		}
 
 		$serializer = $this->create_serializer();
@@ -132,7 +132,7 @@ class Passkey_Login_WebAuthn {
 
 		$user = get_userdata( $user_id );
 		if ( ! $user instanceof WP_User ) {
-			return new WP_Error( 'passkey_login_invalid_user', __( 'User not found.', 'passkey-login' ), array( 'status' => 404 ) );
+			return new WP_Error( 'securekey_login_invalid_user', __( 'User not found.', 'securekey-login' ), array( 'status' => 404 ) );
 		}
 
 		$public_key_credential = $this->parse_public_key_credential( $response, $serializer );
@@ -141,15 +141,15 @@ class Passkey_Login_WebAuthn {
 		}
 
 		if ( ! $public_key_credential->response instanceof \Webauthn\AuthenticatorAttestationResponse ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid registration response.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid registration response.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		if ( ! $this->challenge_store->verify_and_consume( $challenge, 'register', $user_id ) ) {
-			return new WP_Error( 'passkey_login_invalid_challenge', __( 'Challenge expired or invalid.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_challenge', __( 'Challenge expired or invalid.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		if ( $this->credential_store->count_by_user( $user_id ) >= self::MAX_PASSKEYS_PER_USER ) {
-			return new WP_Error( 'passkey_login_limit_reached', __( 'Maximum number of passkeys reached for this account.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_limit_reached', __( 'Maximum number of passkeys reached for this account.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		$creation_options = $this->build_creation_options( $user, $challenge );
@@ -168,7 +168,7 @@ class Passkey_Login_WebAuthn {
 				'warning',
 				$user_id
 			);
-			return new WP_Error( 'passkey_login_registration_failed', __( 'Passkey verification failed.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_registration_failed', __( 'Passkey verification failed.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		if ( '' === $name ) {
@@ -178,7 +178,7 @@ class Passkey_Login_WebAuthn {
 		$credential_id_b64 = Passkey_Login_Crypto::base64url_encode( $public_key_credential_source->publicKeyCredentialId );
 		$serialized_source = $this->serialize_object( $public_key_credential_source, $serializer );
 		if ( '' === $serialized_source ) {
-			return new WP_Error( 'passkey_login_registration_failed', __( 'Could not save credential.', 'passkey-login' ), array( 'status' => 500 ) );
+			return new WP_Error( 'securekey_login_registration_failed', __( 'Could not save credential.', 'securekey-login' ), array( 'status' => 500 ) );
 		}
 
 		$credential_pk = $this->credential_store->save(
@@ -191,7 +191,7 @@ class Passkey_Login_WebAuthn {
 		);
 
 		if ( 0 === $credential_pk ) {
-			return new WP_Error( 'passkey_login_registration_failed', __( 'Could not save credential.', 'passkey-login' ), array( 'status' => 500 ) );
+			return new WP_Error( 'securekey_login_registration_failed', __( 'Could not save credential.', 'securekey-login' ), array( 'status' => 500 ) );
 		}
 
 		Passkey_Login_Logger::audit( 'passkey_registered', 'User registered a passkey credential.', array( 'credential_pk' => $credential_pk ) );
@@ -211,7 +211,7 @@ class Passkey_Login_WebAuthn {
 	public function begin_authentication( ?int $user_id = null ) {
 		$challenge = $this->challenge_store->create( $user_id, 'authenticate' );
 		if ( '' === $challenge ) {
-			return new WP_Error( 'passkey_login_challenge_unavailable', __( 'Could not initialize passkey authentication.', 'passkey-login' ), array( 'status' => 500 ) );
+			return new WP_Error( 'securekey_login_challenge_unavailable', __( 'Could not initialize passkey authentication.', 'securekey-login' ), array( 'status' => 500 ) );
 		}
 		$allow     = array();
 
@@ -244,11 +244,11 @@ class Passkey_Login_WebAuthn {
 		$origin    = esc_url_raw( wp_unslash( (string) ( $response['origin'] ?? '' ) ) );
 
 		if ( '' === $challenge || '' === $origin ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid authentication payload.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid authentication payload.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		if ( ! $this->validate_origin( $origin ) ) {
-			return new WP_Error( 'passkey_login_invalid_origin', __( 'Invalid origin.', 'passkey-login' ), array( 'status' => 403 ) );
+			return new WP_Error( 'securekey_login_invalid_origin', __( 'Invalid origin.', 'securekey-login' ), array( 'status' => 403 ) );
 		}
 
 		$serializer = $this->create_serializer();
@@ -262,28 +262,28 @@ class Passkey_Login_WebAuthn {
 		}
 
 		if ( ! $public_key_credential->response instanceof \Webauthn\AuthenticatorAssertionResponse ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid authentication response.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid authentication response.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		$credential_id_b64 = Passkey_Login_Crypto::base64url_encode( $public_key_credential->rawId );
 		$credential        = $this->credential_store->get_by_credential_id( $credential_id_b64 );
 		if ( ! is_array( $credential ) ) {
-			return new WP_Error( 'passkey_login_credential_not_found', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'passkey-login' ), array( 'status' => 404 ) );
+			return new WP_Error( 'securekey_login_credential_not_found', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'securekey-login' ), array( 'status' => 404 ) );
 		}
 
 		$user_id = isset( $credential['user_id'] ) ? (int) $credential['user_id'] : 0;
 		if ( $user_id <= 0 ) {
-			return new WP_Error( 'passkey_login_invalid_user', __( 'Credential is not linked to a user.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_user', __( 'Credential is not linked to a user.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		// Authentication may start without username, so challenge may be stored without user binding.
 		if ( ! $this->challenge_store->verify_and_consume( $challenge, 'authenticate' ) ) {
-			return new WP_Error( 'passkey_login_invalid_challenge', __( 'Challenge expired or invalid.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_challenge', __( 'Challenge expired or invalid.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		$public_key_credential_source = $this->credential_store->get_public_key_credential_source( $credential, $serializer );
 		if ( ! $public_key_credential_source instanceof \Webauthn\PublicKeyCredentialSource ) {
-			return new WP_Error( 'passkey_login_credential_not_found', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'passkey-login' ), array( 'status' => 404 ) );
+			return new WP_Error( 'securekey_login_credential_not_found', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'securekey-login' ), array( 'status' => 404 ) );
 		}
 
 		$request_options = $this->build_request_options(
@@ -315,12 +315,12 @@ class Passkey_Login_WebAuthn {
 				'warning',
 				$user_id
 			);
-			return new WP_Error( 'passkey_login_authentication_failed', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'passkey-login' ), array( 'status' => 403 ) );
+			return new WP_Error( 'securekey_login_authentication_failed', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'securekey-login' ), array( 'status' => 403 ) );
 		}
 
 		$serialized_source = $this->serialize_object( $validated_source, $serializer );
 		if ( '' === $serialized_source ) {
-			return new WP_Error( 'passkey_login_authentication_failed', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'passkey-login' ), array( 'status' => 403 ) );
+			return new WP_Error( 'securekey_login_authentication_failed', __( 'This passkey is invalid. Please use password login and register a new passkey.', 'securekey-login' ), array( 'status' => 403 ) );
 		}
 
 		$this->credential_store->update_after_authentication(
@@ -456,17 +456,17 @@ class Passkey_Login_WebAuthn {
 	 */
 	private function parse_public_key_credential( array $payload, object $serializer ) {
 		if ( ! method_exists( $serializer, 'denormalize' ) ) {
-			return new WP_Error( 'passkey_login_server_error', __( 'Passkey verification service is unavailable.', 'passkey-login' ), array( 'status' => 500 ) );
+			return new WP_Error( 'securekey_login_server_error', __( 'Passkey verification service is unavailable.', 'securekey-login' ), array( 'status' => 500 ) );
 		}
 
 		try {
 			$public_key_credential = $serializer->denormalize( $payload, \Webauthn\PublicKeyCredential::class );
 		} catch ( Throwable $exception ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid passkey payload.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid passkey payload.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		if ( ! $public_key_credential instanceof \Webauthn\PublicKeyCredential ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid passkey payload.', 'passkey-login' ), array( 'status' => 400 ) );
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid passkey payload.', 'securekey-login' ), array( 'status' => 400 ) );
 		}
 
 		return $public_key_credential;
@@ -479,7 +479,7 @@ class Passkey_Login_WebAuthn {
 	 */
 	private function create_serializer() {
 		if ( ! class_exists( '\Webauthn\AuthenticatorAttestationResponseValidator' ) || ! class_exists( '\Webauthn\Denormalizer\WebauthnSerializerFactory' ) ) {
-			return new WP_Error( 'passkey_login_server_error', __( 'WebAuthn library is not installed. Run composer install.', 'passkey-login' ), array( 'status' => 500 ) );
+			return new WP_Error( 'securekey_login_server_error', __( 'WebAuthn library is not installed. Run composer install.', 'securekey-login' ), array( 'status' => 500 ) );
 		}
 
 		$manager = \Webauthn\AttestationStatement\AttestationStatementSupportManager::create(

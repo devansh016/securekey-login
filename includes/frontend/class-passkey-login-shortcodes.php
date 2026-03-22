@@ -2,7 +2,7 @@
 /**
  * Frontend shortcodes.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -16,7 +16,7 @@ class Passkey_Login_Shortcodes {
 	 * @return void
 	 */
 	public function init(): void {
-		add_shortcode( 'passkey_login_passkey_register', array( $this, 'register_shortcode' ) );
+		add_shortcode( 'securekey_login_passkey_register', array( $this, 'register_shortcode' ) );
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Passkey_Login_Shortcodes {
 		}
 
 		wp_enqueue_script(
-			'passkey-login-register',
+			'securekey-login-register',
 			PASSKEY_LOGIN_PLUGIN_URL . 'assets/src/js/passkey-register.js',
 			array(),
 			PASSKEY_LOGIN_VERSION,
@@ -42,21 +42,21 @@ class Passkey_Login_Shortcodes {
 		);
 
 		wp_localize_script(
-			'passkey-login-register',
+			'securekey-login-register',
 			'passkeyLoginRegister',
 			array(
-				'restUrl' => esc_url_raw( rest_url( 'passkey-login/v1' ) ),
+				'restUrl' => esc_url_raw( rest_url( 'securekey-login/v1' ) ),
 				'nonce'   => wp_create_nonce( 'wp_rest' ),
 				'i18n'    => array(
-					'notSupported' => __( 'Passkeys are not supported on this browser.', 'passkey-login' ),
-					'failed'       => __( 'Passkey registration failed.', 'passkey-login' ),
-					'success'      => __( 'Passkey added successfully.', 'passkey-login' ),
-					'namePrompt'   => __( 'Enter a name for this passkey:', 'passkey-login' ),
-					'nameDefault'  => __( 'My Passkey', 'passkey-login' ),
+					'notSupported' => __( 'Passkeys are not supported on this browser.', 'securekey-login' ),
+					'failed'       => __( 'Passkey registration failed.', 'securekey-login' ),
+					'success'      => __( 'Passkey added successfully.', 'securekey-login' ),
+					'namePrompt'   => __( 'Enter a name for this passkey:', 'securekey-login' ),
+					'nameDefault'  => __( 'My Passkey', 'securekey-login' ),
 				),
 			)
 		);
 
-		return '<button type="button" id="passkey-login-register" class="button button-secondary">' . esc_html__( 'Add Passkey', 'passkey-login' ) . '</button><p id="passkey-login-register-status" style="display:none;"></p>';
+		return '<button type="button" id="securekey-login-register" class="button button-secondary">' . esc_html__( 'Add Passkey', 'securekey-login' ) . '</button><p id="securekey-login-register-status" style="display:none;"></p>';
 	}
 }

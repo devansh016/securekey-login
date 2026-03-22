@@ -2,7 +2,7 @@
 /**
  * Site lifecycle handling.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

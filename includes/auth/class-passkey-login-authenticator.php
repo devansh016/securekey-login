@@ -2,7 +2,7 @@
 /**
  * WordPress authentication hook integration.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,20 +36,33 @@ class Passkey_Login_Authenticator {
 			return $user;
 		}
 
-		if ( empty( $_POST['passkey_login_passkey_assertion'] ) ) {
+		if ( empty( $_POST['securekey_login_passkey_assertion'] ) ) {
 			return $user;
 		}
 
-		if ( ! isset( $_POST['passkey_login_passkey_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['passkey_login_passkey_nonce'] ) ), 'passkey_login_passkey_login' ) ) {
-			return new WP_Error( 'passkey_login_invalid_nonce', __( 'Security check failed.', 'passkey-login' ) );
+		if ( ! isset( $_POST['securekey_login_passkey_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['securekey_login_passkey_nonce'] ) ), 'securekey_login_passkey_login' ) ) {
+			return new WP_Error( 'securekey_login_invalid_nonce', __( 'Security check failed.', 'securekey-login' ) );
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload is validated and normalized by Passkey_Login_Sanitizer::json_object().
-		$assertion_raw = wp_unslash( $_POST['passkey_login_passkey_assertion'] );
-		if ( ! is_string( $assertion_raw ) ) {
-			return new WP_Error( 'passkey_login_invalid_payload', __( 'Invalid passkey payload.', 'passkey-login' ) );
+		$assertion_raw = wp_unslash( $_POST['securekey_login_passkey_assertion'] );
+		if ( ! is_string( $assertion_raw ) || '' === trim( $assertion_raw ) ) {
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid passkey payload.', 'securekey-login' ) );
 		}
-		$assertion = Passkey_Login_Sanitizer::json_object( $assertion_raw );
+		$assertion = Passkey_Login_Sanitizer::json_object(
+			$assertion_raw,
+			array( 'id', 'type', 'rawId', 'response' )
+		);
+
+		if ( ! isset( $assertion['response'] ) || ! is_array( $assertion['response'] ) ) {
+			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid passkey payload.', 'securekey-login' ) );
+		}
+
+		foreach ( array( 'clientDataJSON', 'authenticatorData', 'signature' ) as $required_key ) {
+			if ( ! isset( $assertion['response'][ $required_key ] ) || ! is_string( $assertion['response'][ $required_key ] ) || '' === $assertion['response'][ $required_key ] ) {
+				return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid passkey payload.', 'securekey-login' ) );
+			}
+		}
+
 		$webauthn  = new Passkey_Login_WebAuthn();
 		$result    = $webauthn->complete_authentication( $assertion );
 
@@ -60,7 +73,7 @@ class Passkey_Login_Authenticator {
 
 		$auth_user = get_user_by( 'id', (int) $result['user_id'] );
 		if ( ! $auth_user instanceof WP_User ) {
-			return new WP_Error( 'passkey_login_user_not_found', __( 'Could not load authenticated user.', 'passkey-login' ) );
+			return new WP_Error( 'securekey_login_user_not_found', __( 'Could not load authenticated user.', 'securekey-login' ) );
 		}
 
 		return $auth_user;

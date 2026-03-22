@@ -2,7 +2,7 @@
 /**
  * User profile UI.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,19 +35,19 @@ class Passkey_Login_User_Profile {
 		$credentials  = $store->get_by_user( (int) $user->ID );
 		$can_register = Passkey_Login_Settings::passkeys_enabled() && '1' === (string) Passkey_Login_Settings::get( 'allow_profile_registration' );
 		?>
-		<h2><?php echo esc_html__( 'Passkey Devices', 'passkey-login' ); ?></h2>
+		<h2><?php echo esc_html__( 'Passkey Devices', 'securekey-login' ); ?></h2>
 		<table class="widefat striped">
 			<thead>
 				<tr>
-					<th><?php echo esc_html__( 'Name', 'passkey-login' ); ?></th>
-					<th><?php echo esc_html__( 'Created', 'passkey-login' ); ?></th>
-					<th><?php echo esc_html__( 'Last Used', 'passkey-login' ); ?></th>
-					<th><?php echo esc_html__( 'Actions', 'passkey-login' ); ?></th>
+					<th><?php echo esc_html__( 'Name', 'securekey-login' ); ?></th>
+					<th><?php echo esc_html__( 'Created', 'securekey-login' ); ?></th>
+					<th><?php echo esc_html__( 'Last Used', 'securekey-login' ); ?></th>
+					<th><?php echo esc_html__( 'Actions', 'securekey-login' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php if ( empty( $credentials ) ) : ?>
-					<tr><td colspan="4"><?php echo esc_html__( 'No passkeys registered.', 'passkey-login' ); ?></td></tr>
+					<tr><td colspan="4"><?php echo esc_html__( 'No passkeys registered.', 'securekey-login' ); ?></td></tr>
 				<?php else : ?>
 					<?php foreach ( $credentials as $credential ) : ?>
 						<tr>
@@ -55,7 +55,7 @@ class Passkey_Login_User_Profile {
 								<?php
 								$name = (string) $credential['name'];
 								if ( '' === $name ) {
-									$name = __( 'Passkey', 'passkey-login' );
+									$name = __( 'Passkey', 'securekey-login' );
 								}
 								echo esc_html( $name );
 								?>
@@ -71,7 +71,7 @@ class Passkey_Login_User_Profile {
 								?>
 							</td>
 							<td>
-								<button type="button" class="button passkey-login-delete-passkey" data-credential-id="<?php echo esc_attr( (string) $credential['id'] ); ?>"><?php echo esc_html__( 'Delete', 'passkey-login' ); ?></button>
+								<button type="button" class="button securekey-login-delete-passkey" data-credential-id="<?php echo esc_attr( (string) $credential['id'] ); ?>"><?php echo esc_html__( 'Delete', 'securekey-login' ); ?></button>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -80,15 +80,15 @@ class Passkey_Login_User_Profile {
 		</table>
 		<?php if ( $can_register ) : ?>
 			<p>
-				<button type="button" id="passkey-login-register" class="button button-secondary"><?php echo esc_html__( 'Add Passkey', 'passkey-login' ); ?></button>
+				<button type="button" id="securekey-login-register" class="button button-secondary"><?php echo esc_html__( 'Add Passkey', 'securekey-login' ); ?></button>
 			</p>
 		<?php endif; ?>
-		<p id="passkey-login-register-status" style="display:none;"></p>
+		<p id="securekey-login-register-status" style="display:none;"></p>
 		<?php
 
 		if ( $can_register ) {
 			wp_enqueue_script(
-				'passkey-login-register',
+				'securekey-login-register',
 				PASSKEY_LOGIN_PLUGIN_URL . 'assets/src/js/passkey-register.js',
 				array(),
 				PASSKEY_LOGIN_VERSION,
@@ -96,17 +96,17 @@ class Passkey_Login_User_Profile {
 			);
 
 			wp_localize_script(
-				'passkey-login-register',
+				'securekey-login-register',
 				'passkeyLoginRegister',
 				array(
-					'restUrl' => esc_url_raw( rest_url( 'passkey-login/v1' ) ),
+					'restUrl' => esc_url_raw( rest_url( 'securekey-login/v1' ) ),
 					'nonce'   => wp_create_nonce( 'wp_rest' ),
 					'i18n'    => array(
-						'notSupported' => __( 'Passkeys are not supported on this browser.', 'passkey-login' ),
-						'failed'       => __( 'Passkey operation failed.', 'passkey-login' ),
-						'success'      => __( 'Passkey updated.', 'passkey-login' ),
-						'namePrompt'   => __( 'Enter a name for this passkey:', 'passkey-login' ),
-						'nameDefault'  => __( 'My Passkey', 'passkey-login' ),
+						'notSupported' => __( 'Passkeys are not supported on this browser.', 'securekey-login' ),
+						'failed'       => __( 'Passkey operation failed.', 'securekey-login' ),
+						'success'      => __( 'Passkey updated.', 'securekey-login' ),
+						'namePrompt'   => __( 'Enter a name for this passkey:', 'securekey-login' ),
+						'nameDefault'  => __( 'My Passkey', 'securekey-login' ),
 					),
 				)
 			);

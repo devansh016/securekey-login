@@ -2,7 +2,7 @@
 /**
  * Capabilities manager.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,8 +21,8 @@ class Passkey_Login_Capabilities {
 		foreach ( $roles as $role_name ) {
 			$role = get_role( $role_name );
 			if ( $role instanceof WP_Role ) {
-				$role->add_cap( 'passkey_login_manage_passkeys' );
-				$role->add_cap( 'passkey_login_manage_network_passkeys' );
+				$role->add_cap( 'securekey_login_manage_passkeys' );
+				$role->add_cap( 'securekey_login_manage_network_passkeys' );
 			}
 		}
 	}
@@ -38,8 +38,8 @@ class Passkey_Login_Capabilities {
 		foreach ( $roles as $role_name ) {
 			$role = get_role( $role_name );
 			if ( $role instanceof WP_Role ) {
-				$role->remove_cap( 'passkey_login_manage_passkeys' );
-				$role->remove_cap( 'passkey_login_manage_network_passkeys' );
+				$role->remove_cap( 'securekey_login_manage_passkeys' );
+				$role->remove_cap( 'securekey_login_manage_network_passkeys' );
 			}
 		}
 	}

@@ -2,7 +2,7 @@
 /**
  * Site admin settings.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,10 +27,10 @@ class Passkey_Login_Admin {
 	 */
 	public function admin_menu(): void {
 		add_options_page(
-			__( 'Passkey Login', 'passkey-login' ),
-			__( 'Passkeys', 'passkey-login' ),
+			__( 'Securekey Login', 'securekey-login' ),
+			__( 'Passkeys', 'securekey-login' ),
 			'manage_options',
-			'passkey-login-settings',
+			'securekey-login-settings',
 			array( $this, 'render_settings_page' )
 		);
 	}
@@ -42,8 +42,8 @@ class Passkey_Login_Admin {
 	 */
 	public function register_settings(): void {
 		register_setting(
-			'passkey_login_settings',
-			'passkey_login_settings',
+			'securekey_login_settings',
+			'securekey_login_settings',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array( 'Passkey_Login_Settings', 'sanitize_site_settings' ),
@@ -51,10 +51,10 @@ class Passkey_Login_Admin {
 			)
 		);
 
-		add_settings_section( 'passkey_login_site', __( 'Site Settings', 'passkey-login' ), '__return_false', 'passkey_login_settings' );
-		$this->add_checkbox( 'enable_passkeys', __( 'Enable passkeys', 'passkey-login' ), 'passkey_login_site' );
-		$this->add_checkbox( 'show_login_button', __( 'Show passkey button on wp-login.php', 'passkey-login' ), 'passkey_login_site' );
-		$this->add_checkbox( 'allow_profile_registration', __( 'Allow passkey registration from profile', 'passkey-login' ), 'passkey_login_site' );
+		add_settings_section( 'securekey_login_site', __( 'Site Settings', 'securekey-login' ), '__return_false', 'securekey_login_settings' );
+		$this->add_checkbox( 'enable_passkeys', __( 'Enable passkeys', 'securekey-login' ), 'securekey_login_site' );
+		$this->add_checkbox( 'show_login_button', __( 'Show passkey button on wp-login.php', 'securekey-login' ), 'securekey_login_site' );
+		$this->add_checkbox( 'allow_profile_registration', __( 'Allow passkey registration from profile', 'securekey-login' ), 'securekey_login_site' );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Passkey_Login_Admin {
 		$key      = (string) $args['key'];
 		$value    = isset( $settings[ $key ] ) ? (string) $settings[ $key ] : '0';
 
-		echo '<label><input type="checkbox" name="passkey_login_settings[' . esc_attr( $key ) . ']" value="1" ' . checked( '1', $value, false ) . disabled( true, $this->is_site_locked(), false ) . ' /> ' . esc_html( (string) $args['label'] ) . '</label>';
+		echo '<label><input type="checkbox" name="securekey_login_settings[' . esc_attr( $key ) . ']" value="1" ' . checked( '1', $value, false ) . disabled( true, $this->is_site_locked(), false ) . ' /> ' . esc_html( (string) $args['label'] ) . '</label>';
 	}
 
 
@@ -83,14 +83,14 @@ class Passkey_Login_Admin {
 		}
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html__( 'Passkey Login Settings', 'passkey-login' ); ?></h1>
+			<h1><?php echo esc_html__( 'Securekey Login Settings', 'securekey-login' ); ?></h1>
 			<?php if ( $this->is_site_locked() ) : ?>
-				<div class="notice notice-info"><p><?php echo esc_html__( 'Site-level overrides are disabled by network policy. Settings are read-only.', 'passkey-login' ); ?></p></div>
+				<div class="notice notice-info"><p><?php echo esc_html__( 'Site-level overrides are disabled by network policy. Settings are read-only.', 'securekey-login' ); ?></p></div>
 			<?php endif; ?>
 			<form method="post" action="options.php">
 				<?php
-				settings_fields( 'passkey_login_settings' );
-				do_settings_sections( 'passkey_login_settings' );
+				settings_fields( 'securekey_login_settings' );
+				do_settings_sections( 'securekey_login_settings' );
 				submit_button();
 				?>
 			</form>
@@ -111,7 +111,7 @@ class Passkey_Login_Admin {
 			$key,
 			$label,
 			array( $this, 'render_checkbox' ),
-			'passkey_login_settings',
+			'securekey_login_settings',
 			$section,
 			array(
 				'key'   => $key,

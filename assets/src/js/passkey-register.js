@@ -63,7 +63,7 @@
   }
 
   function setStatus(message, isError) {
-    const node = document.getElementById('passkey-login-register-status');
+    const node = document.getElementById('securekey-login-register-status');
     if (!node) {
       return;
     }
@@ -149,7 +149,7 @@
   }
 
   document.addEventListener('click', function (event) {
-    if (event.target && event.target.id === 'passkey-login-register') {
+    if (event.target && event.target.id === 'securekey-login-register') {
       event.preventDefault();
       registerPasskey();
     }
@@ -157,7 +157,7 @@
 
   document.addEventListener('click', async function (event) {
     const target = event.target;
-    if (!target || !target.classList || !target.classList.contains('passkey-login-delete-passkey')) {
+    if (!target || !target.classList || !target.classList.contains('securekey-login-delete-passkey')) {
       return;
     }
 

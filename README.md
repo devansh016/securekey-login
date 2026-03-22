@@ -1,6 +1,6 @@
-# Passkey Login
+# Securekey Login
 
-Passkey Login adds passwordless passkey authentication (WebAuthn/FIDO2) to WordPress 6.3+ and PHP 8.2+, with first-class multisite support.
+Securekey Login adds passwordless passkey authentication (WebAuthn/FIDO2) to WordPress 6.3+ and PHP 8.2+, with first-class multisite support.
 
 ## Features
 
@@ -8,7 +8,7 @@ Passkey Login adds passwordless passkey authentication (WebAuthn/FIDO2) to WordP
 - Single-site and multisite network support
 - Per-site credential/challenge storage
 - Network-wide security audit log
-- REST API (`/wp-json/passkey-login/v1`)
+- REST API (`/wp-json/securekey-login/v1`)
 - User profile passkey management UI
 - Password login remains available as a fallback
 

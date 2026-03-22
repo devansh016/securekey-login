@@ -2,7 +2,7 @@
 /**
  * Network site overview list table.
  *
- * @package passkey-login
+ * @package securekey-login
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,10 +21,10 @@ class Passkey_Login_Network_Site_List_Table extends WP_List_Table {
 	 */
 	public function get_columns(): array {
 		return array(
-			'site_id'          => __( 'Site ID', 'passkey-login' ),
-			'domain'           => __( 'Domain', 'passkey-login' ),
-			'path'             => __( 'Path', 'passkey-login' ),
-			'credential_count' => __( 'Passkeys', 'passkey-login' ),
+			'site_id'          => __( 'Site ID', 'securekey-login' ),
+			'domain'           => __( 'Domain', 'securekey-login' ),
+			'path'             => __( 'Path', 'securekey-login' ),
+			'credential_count' => __( 'Passkeys', 'securekey-login' ),
 		);
 	}
 
@@ -40,7 +40,7 @@ class Passkey_Login_Network_Site_List_Table extends WP_List_Table {
 		foreach ( $sites as $site ) {
 			switch_to_blog( (int) $site->blog_id );
 			global $wpdb;
-			$table = $wpdb->prefix . 'passkey_login_credentials';
+			$table = $wpdb->prefix . 'securekey_login_credentials';
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Network overview reads counts from each site's plugin-owned table.
 			$count = (int) $wpdb->get_var(
 				$wpdb->prepare(
