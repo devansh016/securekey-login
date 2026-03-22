@@ -134,7 +134,6 @@ return array(
     'DateRangeError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
     'Deprecated' => $vendorDir . '/symfony/polyfill-php84/Resources/stubs/Deprecated.php',
     'Doctrine\\Deprecations\\Deprecation' => $vendorDir . '/doctrine/deprecations/src/Deprecation.php',
-    'Doctrine\\Deprecations\\PHPUnit\\VerifyDeprecations' => $vendorDir . '/doctrine/deprecations/src/PHPUnit/VerifyDeprecations.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     'Override' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/Override.php',
     'PHPStan\\PhpDocParser\\Ast\\AbstractNodeVisitor' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php',

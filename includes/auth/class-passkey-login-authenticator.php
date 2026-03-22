@@ -44,7 +44,7 @@ class Passkey_Login_Authenticator {
 			return new WP_Error( 'securekey_login_invalid_nonce', __( 'Security check failed.', 'securekey-login' ) );
 		}
 
-		$assertion_raw = wp_unslash( $_POST['securekey_login_passkey_assertion'] );
+		$assertion_raw = sanitize_text_field( wp_unslash( $_POST['securekey_login_passkey_assertion'] ) );
 		if ( ! is_string( $assertion_raw ) || '' === trim( $assertion_raw ) ) {
 			return new WP_Error( 'securekey_login_invalid_payload', __( 'Invalid passkey payload.', 'securekey-login' ) );
 		}

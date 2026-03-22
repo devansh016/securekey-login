@@ -52,8 +52,9 @@ class Passkey_Login_Network_Admin {
 		}
 
 		check_admin_referer( 'securekey_login_network_settings' );
-		$raw_input = isset( $_POST['securekey_login_network_settings'] ) ? wp_unslash( $_POST['securekey_login_network_settings'] ) : array();
+		$raw_input = filter_input( INPUT_POST, 'securekey_login_network_settings', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY );
 		$input     = is_array( $raw_input ) ? $raw_input : array();
+		$input     = wp_unslash( $input );
 		$input     = array_intersect_key( $input, self::allowed_settings_keys() );
 		$clean = Passkey_Login_Settings::sanitize_network_settings( $input );
 		update_site_option( 'securekey_login_network_settings', $clean );
