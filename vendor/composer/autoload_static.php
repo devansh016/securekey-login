@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd59f9907213b20245d4b83074124c3b9
+class ComposerStaticInitd3a931c16d71406c085615af9fdfec82
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -317,6 +317,7 @@ class ComposerStaticInitd59f9907213b20245d4b83074124c3b9
         'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
         'Deprecated' => __DIR__ . '/..' . '/symfony/polyfill-php84/Resources/stubs/Deprecated.php',
         'Doctrine\\Deprecations\\Deprecation' => __DIR__ . '/..' . '/doctrine/deprecations/src/Deprecation.php',
+        'Doctrine\\Deprecations\\PHPUnit\\VerifyDeprecations' => __DIR__ . '/..' . '/doctrine/deprecations/src/PHPUnit/VerifyDeprecations.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
         'PHPStan\\PhpDocParser\\Ast\\AbstractNodeVisitor' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php',
@@ -1341,9 +1342,9 @@ class ComposerStaticInitd59f9907213b20245d4b83074124c3b9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd59f9907213b20245d4b83074124c3b9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd59f9907213b20245d4b83074124c3b9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd59f9907213b20245d4b83074124c3b9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd3a931c16d71406c085615af9fdfec82::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd3a931c16d71406c085615af9fdfec82::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd3a931c16d71406c085615af9fdfec82::$classMap;
 
         }, null, ClassLoader::class);
     }
